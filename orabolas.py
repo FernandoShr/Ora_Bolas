@@ -202,10 +202,17 @@ def graphPosY(posRoboX, posRoboY):
 
         tempoTot += 0.02
 
-    if posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+    # if posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+    #     aceleRoboY = - abs(sin(direcao))*aceleRobo
+    # else:
+    #     aceleRoboY = abs(sin(direcao))*aceleRobo
+
+    ypbola = -0.008*(tempoEncontro**2) + 0.4*tempoEncontro + 0.5
+    if posRoboY > ypbola:
         aceleRoboY = - abs(sin(direcao))*aceleRobo
     else:
         aceleRoboY = abs(sin(direcao))*aceleRobo
+
     # aceleRoboY = sin(direcao)*aceleRobo
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
@@ -276,10 +283,17 @@ def graphPosX(posRoboX, posRoboY):
 
         tempoTot += 0.02
     
-    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
+    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
+    #     aceleRoboX = - abs(cos(direcao))*aceleRobo
+    # elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
+    #     aceleRoboX = abs(cos(direcao))*aceleRobo
+
+    xpbola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
+    if posRoboX > xpbola:
         aceleRoboX = - abs(cos(direcao))*aceleRobo
-    elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
-        aceleRoboX = abs(cos(direcao))*aceleRobo
+    else:
+        aceleRoboX =   abs(cos(direcao))*aceleRobo
+
 
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
@@ -349,10 +363,17 @@ def graphVeloX(posRoboX, posRoboY):
                 break
 
         tempoTot += 0.02
-    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
+    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
+    #     aceleRoboX = - abs(cos(direcao))*aceleRobo
+    # elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
+    #     aceleRoboX = abs(cos(direcao))*aceleRobo
+
+    xpbola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
+    if posRoboX > xpbola:
         aceleRoboX = - abs(cos(direcao))*aceleRobo
-    elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
-        aceleRoboX = abs(cos(direcao))*aceleRobo
+    else:
+        aceleRoboX =   abs(cos(direcao))*aceleRobo
+
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
     xvbola = -0.010*tempo + 0.5
@@ -421,10 +442,18 @@ def graphVeloY(posRoboX, posRoboY):
                 break
 
         tempoTot += 0.02
-    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+    #     aceleRoboY = - abs(sin(direcao))*aceleRobo
+    # else:
+    #     aceleRoboY = abs(sin(direcao))*aceleRobo
+
+    ypbola = -0.008*(tempoEncontro**2) + 0.4*tempoEncontro + 0.5
+    if posRoboY > ypbola:
         aceleRoboY = - abs(sin(direcao))*aceleRobo
     else:
         aceleRoboY = abs(sin(direcao))*aceleRobo
+
+
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
     yvbola = -0.016*tempo + 0.4
@@ -493,10 +522,17 @@ def graphAceleX(posRoboX, posRoboY):
                 break
 
         tempoTot += 0.02
-    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
+    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
+    #     aceleRoboX = - abs(cos(direcao))*aceleRobo
+    # elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
+    #     aceleRoboX = abs(cos(direcao))*aceleRobo
+
+    xpbola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
+    if posRoboX > xpbola:
         aceleRoboX = - abs(cos(direcao))*aceleRobo
-    elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
-        aceleRoboX = abs(cos(direcao))*aceleRobo
+    else:
+        aceleRoboX =   abs(cos(direcao))*aceleRobo
+
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
     xabola = -0.010*(tempo**0)
@@ -565,10 +601,18 @@ def graphAceleY(posRoboX, posRoboY):
                 break
 
         tempoTot += 0.02
-    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+    #     aceleRoboY = - abs(sin(direcao))*aceleRobo
+    # else:
+    #     aceleRoboY = abs(sin(direcao))*aceleRobo
+
+    ypbola = -0.008*(tempoEncontro**2) + 0.4*tempoEncontro + 0.5
+    if posRoboY > ypbola:
         aceleRoboY = - abs(sin(direcao))*aceleRobo
     else:
         aceleRoboY = abs(sin(direcao))*aceleRobo
+
+
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
     yabola = -0.016*(tempo**0)
@@ -638,17 +682,29 @@ def graphDistRel(posRoboX, posRoboY):
         tempoTot += 0.02
 
     
-    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+    #     aceleRoboY = - abs(sin(direcao))*aceleRobo
+    # else:
+    #     aceleRoboY = abs(sin(direcao))*aceleRobo
+
+    ypbola = -0.008*(tempoEncontro**2) + 0.4*tempoEncontro + 0.5
+    if posRoboY > ypbola:
         aceleRoboY = - abs(sin(direcao))*aceleRobo
     else:
         aceleRoboY = abs(sin(direcao))*aceleRobo
 
 
+    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
+    #     aceleRoboX = - abs(cos(direcao))*aceleRobo
+    # elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
+    #     aceleRoboX = abs(cos(direcao))*aceleRobo
 
-    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
+
+    xpbola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
+    if posRoboX > xpbola:
         aceleRoboX = - abs(cos(direcao))*aceleRobo
-    elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
-        aceleRoboX = abs(cos(direcao))*aceleRobo
+    else:
+        aceleRoboX =   abs(cos(direcao))*aceleRobo
 
 
 
