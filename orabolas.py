@@ -729,8 +729,79 @@ def graphDistRel(posRoboX, posRoboY):
     # Printar o gráfico
     plt.show()
 
-def graphEnergiaCinet():
-    pass
+def graphEnergiaCinet(posRoboX, posRoboY):
+    if posRoboX < 0 or posRoboX > 9:
+        msg()
+        return
+    elif posRoboY < 0 or posRoboY > 6:
+        msg();
+        return
+    else:
+        pass 
+    raioRobo = 0.09 # metros
+    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+    aceleMax = 2 # m/s^s
+    veloMax = 3 # m/s
+    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
+    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
+
+    # Dados da bola:
+    v0B = 0.64 # m/s
+    posBolaX = 1
+    posBolaY = 0.5
+    tempoTot = 0
+    encontrou = False
+    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
+    #print(distRoboBola)
+
+    # Encontrar a bola:
+    while tempoTot <= 20:
+        yB = -0.008*(tempoTot**2) + 0.4*tempoTot + 0.5
+        xB = -0.005*(tempoTot**2) + 0.5*tempoTot + 1
+
+        posBolaY = yB
+        posBolaX = xB
+        distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
+
+        if tempoTot != 0:
+            acelePrecisa = (2*distRoboBola)/(tempoTot**2)
+            print("\nacele teste =",acelePrecisa)
+            print("tempotot =%f\n"%tempoTot)
+            veloPrecisa = acelePrecisa*tempoTot
+            if acelePrecisa > aceleMax or veloPrecisa > veloMax:
+                pass
+            else:
+                aceleRobo = acelePrecisa
+                veloRobo = veloPrecisa
+                direcao = atan((posBolaY - posRoboY)/(posBolaX - posRoboX))
+                encontrou = True
+                tempoEncontro = tempoTot
+                break
+
+        tempoTot += 0.02
+
+    aceleBola = 0.019 # (m/s^2)
+    mRobo = 2.8 # (Kg)
+    mBola = 0.045 # (Kg)
+
+    fig, ax = plt.subplots()
+    tempo = np.linspace(0, tempoEncontro, 1000)
+    veloRob = aceleRobo*tempo
+    veloBola = aceleBola*tempo
+    ecBola = mBola*(veloBola**2)/2
+    ecRobo = mRobo*(veloRob**2)/2 
+    plt.plot(tempo, ecBola, label = 'Bola')
+    plt.plot(tempo, ecRobo, label = 'Robo')
+
+    #Personalizações do Gráfico
+    plt.xlabel("Tempo (s)")
+    plt.ylabel("Energia Cinética (J)")
+    plt.title("Energia Cinética / Tempo")
+    plt.grid()
+    plt.legend()
+
+    # Printar o gráfico
+    plt.show()
 
 
 posY = Button(janela, text="Posição Y por Tempo", font=("Times New Roman", 15), command= lambda: graphPosY(float(posRoboX.get()), float(posRoboY.get())))
@@ -756,6 +827,9 @@ distRela.place(relx=0.3, rely=0.92, anchor=CENTER)
 
 trajeto = Button(janela, text="Trajetoria no Campo", font=("Times New Roman", 15), command= lambda: graphTrajetoCampo(float(posRoboX.get()), float(posRoboY.get())))
 trajeto.place(relx=0.7, rely=0.92, anchor=CENTER)
+
+ecinet = Button(janela, text="Energia Cinética", font=("Times New Roman", 15), command= lambda: graphEnergiaCinet(float(posRoboX.get()), float(posRoboY.get())))
+ecinet.place(relx=0.89, rely=0.1, anchor=CENTER)
 
 
 janela.mainloop()
