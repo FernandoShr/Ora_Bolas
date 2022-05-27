@@ -12,17 +12,17 @@ janela = Tk()
 janela.geometry("700x350")
 janela.title("Ora Bolas")
 
-t1 = Label(janela, text="Posição inicial do Robô em X:", font=("Times New Roman",13))
+janela.configure(bg='#9FFFF6')
+
+t1 = Label(janela, text="Posição inicial do Robô em X:", font=("Times New Roman",13), bg='#9FFFF6')
 t1.place(relx=0.48, rely=0.02, anchor=NE)
 posRoboX = Entry(janela, width=20, font=("Times New Roman", 13))
 posRoboX.place(relx=0.5, rely=0.02, anchor=NW)
 
-t2 = Label(janela, text="Posição inicial do Robô em Y:", font=("Times New Roman",13))
+t2 = Label(janela, text="Posição inicial do Robô em Y:", font=("Times New Roman",13), bg='#9FFFF6')
 t2.place(relx=0.48, rely=0.1, anchor=NE)
 posRoboY = Entry(janela, width=20, font=("Times New Roman", 13))
 posRoboY.place(relx=0.5, rely=0.1, anchor=NW)
-
-
 
 
 # Calculo Robo:
@@ -202,7 +202,7 @@ def graphPosY(posRoboX, posRoboY):
 
         tempoTot += 0.02
 
-    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+    if posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
         aceleRoboY = - abs(sin(direcao))*aceleRobo
     else:
         aceleRoboY = abs(sin(direcao))*aceleRobo
@@ -672,6 +672,9 @@ def graphDistRel(posRoboX, posRoboY):
 
     # Printar o gráfico
     plt.show()
+
+def graphEnergiaCinet():
+    pass
 
 
 posY = Button(janela, text="Posição Y por Tempo", font=("Times New Roman", 15), command= lambda: graphPosY(float(posRoboX.get()), float(posRoboY.get())))
