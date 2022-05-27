@@ -1,11 +1,15 @@
+from operator import ne
+from matplotlib import image
 import matplotlib.pyplot as plt
 import numpy as np
 from math import *
 from tkinter import *
 from functools import partial
+from tkinter import messagebox
+
 
 janela = Tk()
-janela.geometry("600x300")
+janela.geometry("700x350")
 janela.title("Ora Bolas")
 
 t1 = Label(janela, text="Posição inicial do Robô em X:", font=("Times New Roman",13))
@@ -17,6 +21,7 @@ t2 = Label(janela, text="Posição inicial do Robô em Y:", font=("Times New Rom
 t2.place(relx=0.48, rely=0.1, anchor=NE)
 posRoboY = Entry(janela, width=20, font=("Times New Roman", 13))
 posRoboY.place(relx=0.5, rely=0.1, anchor=NW)
+
 
 
 
@@ -71,10 +76,21 @@ encontrou = False
 # print(tempoEncontro)
 
 
+def msg():
+    aviso = messagebox.showinfo('Aviso', 'Valor Inválido, Robô fora de campo!\nPor favor, selecione um valor entre 0 a 9 para X e entre 0 a 6 para Y.')
 
 
 ######## Trajetória no campo ###########
 def graphTrajetoCampo(posRoboX, posRoboY):
+    if posRoboX < 0 or posRoboX > 9:
+        msg()
+        return
+    elif posRoboY < 0 or posRoboY > 6:
+        msg();
+        return
+    else:
+        pass
+
     raioRobo = 0.09 # metros
     raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
     aceleMax = 2 # m/s^s
@@ -136,6 +152,14 @@ def graphTrajetoCampo(posRoboX, posRoboY):
 
 ###### Gráficos Posições Y/Tempo ##########
 def graphPosY(posRoboX, posRoboY):
+    if posRoboX < 0 or posRoboX > 9:
+        msg()
+        return
+    elif posRoboY < 0 or posRoboY > 6:
+        msg();
+        return
+    else:
+        pass 
     raioRobo = 0.09 # metros
     raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
     aceleMax = 2 # m/s^s
@@ -202,6 +226,14 @@ def graphPosY(posRoboX, posRoboY):
 
 ###### Gráficos Posições X/Tempo ##########
 def graphPosX(posRoboX, posRoboY):
+    if posRoboX < 0 or posRoboX > 9:
+        msg()
+        return
+    elif posRoboY < 0 or posRoboY > 6:
+        msg();
+        return
+    else:
+        pass 
     raioRobo = 0.09 # metros
     raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
     aceleMax = 2 # m/s^s
@@ -268,6 +300,14 @@ def graphPosX(posRoboX, posRoboY):
 
 ###### Gráficos Velocidades X/Tempo ##########
 def graphVeloX(posRoboX, posRoboY):
+    if posRoboX < 0 or posRoboX > 9:
+        msg()
+        return
+    elif posRoboY < 0 or posRoboY > 6:
+        msg();
+        return
+    else:
+        pass 
     raioRobo = 0.09 # metros
     raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
     aceleMax = 2 # m/s^s
@@ -332,6 +372,14 @@ def graphVeloX(posRoboX, posRoboY):
 
 ###### Gráficos Velocidades Y/Tempo ##########
 def graphVeloY(posRoboX, posRoboY):
+    if posRoboX < 0 or posRoboX > 9:
+        msg()
+        return
+    elif posRoboY < 0 or posRoboY > 6:
+        msg();
+        return
+    else:
+        pass 
     raioRobo = 0.09 # metros
     raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
     aceleMax = 2 # m/s^s
@@ -396,6 +444,14 @@ def graphVeloY(posRoboX, posRoboY):
 
 ###### Gráficos Aceleração X/Tempo ##########
 def graphAceleX(posRoboX, posRoboY):
+    if posRoboX < 0 or posRoboX > 9:
+        msg()
+        return
+    elif posRoboY < 0 or posRoboY > 6:
+        msg();
+        return
+    else:
+        pass 
     raioRobo = 0.09 # metros
     raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
     aceleMax = 2 # m/s^s
@@ -460,6 +516,14 @@ def graphAceleX(posRoboX, posRoboY):
 
 ###### Gráficos Aceleração Y/Tempo ##########
 def graphAceleY(posRoboX, posRoboY):
+    if posRoboX < 0 or posRoboX > 9:
+        msg()
+        return
+    elif posRoboY < 0 or posRoboY > 6:
+        msg();
+        return
+    else:
+        pass 
     raioRobo = 0.09 # metros
     raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
     aceleMax = 2 # m/s^s
@@ -522,25 +586,117 @@ def graphAceleY(posRoboX, posRoboY):
     # Printar o gráfico
     plt.show()
 
-trajeto = Button(janela, text="Trajetoria no Campo", font=("Times New Roman", 15), command= lambda: graphTrajetoCampo(float(posRoboX.get()), float(posRoboY.get())))
-trajeto.place(relx=0.7, rely=0.79, anchor=CENTER)
+def graphDistRel(posRoboX, posRoboY):
+    if posRoboX < 0 or posRoboX > 9:
+        msg()
+        return
+    elif posRoboY < 0 or posRoboY > 6:
+        msg();
+        return
+    else:
+        pass 
+    raioRobo = 0.09 # metros
+    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+    aceleMax = 2 # m/s^s
+    veloMax = 3 # m/s
+    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
+    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
+
+    # Dados da bola:
+    v0B = 0.64 # m/s
+    posBolaX = 1
+    posBolaY = 0.5
+    tempoTot = 0
+    encontrou = False
+    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
+    #print(distRoboBola)
+
+    # Encontrar a bola:
+    while tempoTot <= 20:
+        yB = -0.008*(tempoTot**2) + 0.4*tempoTot + 0.5
+        xB = -0.005*(tempoTot**2) + 0.5*tempoTot + 1
+
+        posBolaY = yB
+        posBolaX = xB
+        distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
+
+        if tempoTot != 0:
+            acelePrecisa = (2*distRoboBola)/(tempoTot**2)
+            print("\nacele teste =",acelePrecisa)
+            print("tempotot =%f\n"%tempoTot)
+            veloPrecisa = acelePrecisa*tempoTot
+            if acelePrecisa > aceleMax or veloPrecisa > veloMax:
+                pass
+            else:
+                aceleRobo = acelePrecisa
+                veloRobo = veloPrecisa
+                direcao = atan((posBolaY - posRoboY)/(posBolaX - posRoboX))
+                encontrou = True
+                tempoEncontro = tempoTot
+                break
+
+        tempoTot += 0.02
+
+    
+    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
+        aceleRoboY = - abs(sin(direcao))*aceleRobo
+    else:
+        aceleRoboY = abs(sin(direcao))*aceleRobo
+
+
+
+    if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
+        aceleRoboX = - abs(cos(direcao))*aceleRobo
+    elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
+        aceleRoboX = abs(cos(direcao))*aceleRobo
+
+
+
+    fig, ax = plt.subplots()
+    tempo = np.linspace(0, tempoEncontro, 1000)
+
+    # yprobo = posRoboY + aceleRoboY*(tempo**2)/2
+    # ypbola = -0.008*(tempo**2) + 0.4*tempo + 0.5
+    # xprobo = posRoboX + aceleRoboX*(tempo**2)/2
+    # xpbola = -0.005*(tempo**2) + 0.5*tempo + 1
+
+    distRel = np.sqrt(((-0.008*(tempo**2) + 0.4*tempo + 0.5) - (posRoboY + aceleRoboY*(tempo**2)/2))**2 + ((-0.005*(tempo**2) + 0.5*tempo + 1) - (posRoboX + aceleRoboX*(tempo**2)/2))**2)
+    plt.plot(tempo, distRel, label = 'Distância Relativa Robo-Bola')
+
+    #Personalizações do Gráfico
+    plt.xlabel("Tempo (s)")
+    plt.ylabel("Distância Relativa (m)")
+    plt.title("Distância Relativa / Tempo")
+    plt.grid()
+    plt.legend()
+
+    # Printar o gráfico
+    plt.show()
+
 
 posY = Button(janela, text="Posição Y por Tempo", font=("Times New Roman", 15), command= lambda: graphPosY(float(posRoboX.get()), float(posRoboY.get())))
-posY.place(relx=0.5, rely=0.79, anchor=CENTER)
+posY.place(relx=0.7, rely=0.32, anchor=CENTER)
 
 posX = Button(janela, text="Posição X por Tempo", font=("Times New Roman", 15), command= lambda: graphPosX(float(posRoboX.get()), float(posRoboY.get())))
-posX.place(relx=0.5, rely=0.49, anchor=CENTER)
+posX.place(relx=0.3, rely=0.32, anchor=CENTER)
 
 veloX = Button(janela, text="Velocidade em X por Tempo", font=("Times New Roman", 15), command= lambda: graphVeloX(float(posRoboX.get()), float(posRoboY.get())))
-veloX.place(relx=0.5, rely=0.62, anchor=CENTER)
+veloX.place(relx=0.3, rely=0.52, anchor=CENTER)
 
 veloY = Button(janela, text="Velocidade em Y por Tempo", font=("Times New Roman", 15), command= lambda: graphVeloY(float(posRoboX.get()), float(posRoboY.get())))
-veloY.place(relx=0.3, rely=0.62, anchor=CENTER)
+veloY.place(relx=0.7, rely=0.52, anchor=CENTER)
 
 aceX= Button(janela, text="Aceleração em X por Tempo", font=("Times New Roman", 15), command= lambda: graphAceleX(float(posRoboX.get()), float(posRoboY.get())))
-aceX.place(relx=0.3, rely=0.42, anchor=CENTER)
+aceX.place(relx=0.3, rely=0.72, anchor=CENTER)
 
 aceY= Button(janela, text="Aceleração em Y por Tempo", font=("Times New Roman", 15), command= lambda: graphAceleY(float(posRoboX.get()), float(posRoboY.get())))
-aceY.place(relx=0.7, rely=0.42, anchor=CENTER)
+aceY.place(relx=0.7, rely=0.72, anchor=CENTER)
+
+distRela= Button(janela, text="Distância Relativa por Tempo", font=("Times New Roman", 15), command= lambda: graphDistRel(float(posRoboX.get()), float(posRoboY.get())))
+distRela.place(relx=0.3, rely=0.92, anchor=CENTER)
+
+trajeto = Button(janela, text="Trajetoria no Campo", font=("Times New Roman", 15), command= lambda: graphTrajetoCampo(float(posRoboX.get()), float(posRoboY.get())))
+trajeto.place(relx=0.7, rely=0.92, anchor=CENTER)
+
 
 janela.mainloop()
