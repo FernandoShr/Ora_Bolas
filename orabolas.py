@@ -1,19 +1,29 @@
-from operator import ne
-from matplotlib import image
 import matplotlib.pyplot as plt
 import numpy as np
 from math import *
 from tkinter import *
-from functools import partial
 from tkinter import messagebox
 
+######### Dados internos do robo e da bola #########
 
+### Robo ###
+# modelo: small size
+# raioRobo = 0.09 # metros
+# aceleMax = 2 # m/s^s
+# veloMax = 3 # m/s
+
+### Bola ###
+# velocidade inicial = 0.64 # m/s
+# posição incial da bola em X = 1
+# posição incial da bola em Y = 0.5
+
+# Janela Tkinter
 janela = Tk()
 janela.geometry("700x350")
 janela.title("Ora Bolas")
-
 janela.configure(bg='#9FFFF6')
 
+# Campos de entrada para as posições iniciais do Robô:
 t1 = Label(janela, text="Posição inicial do Robô em X:", font=("Times New Roman",13), bg='#9FFFF6')
 t1.place(relx=0.48, rely=0.02, anchor=NE)
 posRoboX = Entry(janela, width=20, font=("Times New Roman", 13))
@@ -25,57 +35,7 @@ posRoboY = Entry(janela, width=20, font=("Times New Roman", 13))
 posRoboY.place(relx=0.5, rely=0.1, anchor=NW)
 
 
-# Calculo Robo:
-# modelo: small size
-raioRobo = 0.09 # metros
-raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
-aceleMax = 2 # m/s^s
-veloMax = 3 # m/s
-#posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-#posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
-
-# Dados da bola:
-v0B = 0.64 # m/s
-posBolaX = 1
-posBolaY = 0.5
-tempoTot = 0
-encontrou = False
-#distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-#print(distRoboBola)
-
-# Encontrar a bola:
-# while tempoTot <= 20:
-#     yB = -0.008*(tempoTot**2) + 0.4*tempoTot + 0.5
-#     xB = -0.005*(tempoTot**2) + 0.5*tempoTot + 1
-
-#     posBolaY = yB
-#     posBolaX = xB
-#     distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-
-#     if tempoTot != 0:
-#         acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-#         print("\nacele teste =",acelePrecisa)
-#         print("tempotot =%f\n"%tempoTot)
-#         veloPrecisa = acelePrecisa*tempoTot
-#         if acelePrecisa > aceleMax or veloPrecisa > veloMax:
-#             pass
-#         else:
-#             aceleRobo = acelePrecisa
-#             veloRobo = veloPrecisa
-#             direcao = atan((posBolaY - posRoboY)/(posBolaX - posRoboX))
-#             encontrou = True
-#             tempoEncontro = tempoTot
-#             break
-
-#     tempoTot += 0.02
-
-# print(aceleRobo)
-# print(veloRobo)
-# print(direcao*180/pi)
-# print(encontrou)
-# print(tempoEncontro)
-
-
+# Função para alertar o usuário caso insira algum valor inválido
 def msg():
     aviso = messagebox.showinfo('Aviso', 'Valor Inválido, Robô fora de campo!\nPor favor, selecione um valor entre 0 a 9 para X e entre 0 a 6 para Y.')
 
@@ -91,21 +51,14 @@ def graphTrajetoCampo(posRoboX, posRoboY):
     else:
         pass
 
-    raioRobo = 0.09 # metros
-    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+    # Dados do robo:
     aceleMax = 2 # m/s^s
     veloMax = 3 # m/s
-    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
 
     # Dados da bola:
-    v0B = 0.64 # m/s
     posBolaX = 1
     posBolaY = 0.5
     tempoTot = 0
-    encontrou = False
-    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-    #print(distRoboBola)
 
     # Encontrar a bola:
     while tempoTot <= 20:
@@ -118,36 +71,38 @@ def graphTrajetoCampo(posRoboX, posRoboY):
 
         if tempoTot != 0:
             acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-            print("\nacele teste =",acelePrecisa)
-            print("tempotot =%f\n"%tempoTot)
+            
             veloPrecisa = acelePrecisa*tempoTot
             if acelePrecisa > aceleMax or veloPrecisa > veloMax:
                 pass
             else:
-                aceleRobo = acelePrecisa
-                veloRobo = veloPrecisa
                 direcao = atan((posBolaY - posRoboY)/(posBolaX - posRoboX))
-                encontrou = True
                 tempoEncontro = tempoTot
                 break
 
         tempoTot += 0.02
 
-    # Criar figura e eixos
+    # Monta o Gráfico
     fig, ax = plt.subplots()
+    xpbola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
     x = np.linspace(1, 9, 1000)
+    xpB = np.linspace(1, xpbola, 1000)
     ybola = -0.0309*(x**2) + 0.9215*x - 0.4366
+    ybolalim = -0.0309*(xpB**2) + 0.9215*xpB - 0.4366
     xpLimitebola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
     rx = np.linspace(posRoboX, xpLimitebola, 1000)
     yrobo = tan(direcao)*(rx - posRoboX) + posRoboY
-    ax.plot(x,ybola, label='Bola')
-    ax.plot(rx,yrobo, label='Robo')
-    #Personalizações do Gráfico
+    ax.plot(xpB,ybolalim, label='Bola',color='blue')
+    ax.plot(rx,yrobo, label='Robo', color='orange')
+    ax.plot(x,ybola, label = 'Trajeto da bola (sem interceptação)' ,ls='--', color='blue')
+
+    # Personalizações do Gráfico
     plt.xlabel("Posição X (m)")
     plt.ylabel("Posição Y (m)")
     plt.title("Trajetoria Campo")
     plt.legend()
 
+    # Mostra o Gráfico
     plt.show()
 
 ###### Gráficos Posições Y/Tempo ##########
@@ -160,21 +115,15 @@ def graphPosY(posRoboX, posRoboY):
         return
     else:
         pass 
-    raioRobo = 0.09 # metros
-    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+
+    # Dados do Robo:
     aceleMax = 2 # m/s^s
     veloMax = 3 # m/s
-    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
 
     # Dados da bola:
-    v0B = 0.64 # m/s
     posBolaX = 1
     posBolaY = 0.5
     tempoTot = 0
-    encontrou = False
-    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-    #print(distRoboBola)
 
     # Encontrar a bola:
     while tempoTot <= 20:
@@ -187,33 +136,26 @@ def graphPosY(posRoboX, posRoboY):
 
         if tempoTot != 0:
             acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-            print("\nacele teste =",acelePrecisa)
-            print("tempotot =%f\n"%tempoTot)
+            
             veloPrecisa = acelePrecisa*tempoTot
             if acelePrecisa > aceleMax or veloPrecisa > veloMax:
                 pass
             else:
                 aceleRobo = acelePrecisa
-                veloRobo = veloPrecisa
                 direcao = atan((posBolaY - posRoboY)/(posBolaX - posRoboX))
-                encontrou = True
                 tempoEncontro = tempoTot
                 break
 
         tempoTot += 0.02
 
-    # if posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
-    #     aceleRoboY = - abs(sin(direcao))*aceleRobo
-    # else:
-    #     aceleRoboY = abs(sin(direcao))*aceleRobo
-
+    # Determina a direção da aceleração do robo
     ypbola = -0.008*(tempoEncontro**2) + 0.4*tempoEncontro + 0.5
     if posRoboY > ypbola:
         aceleRoboY = - abs(sin(direcao))*aceleRobo
     else:
         aceleRoboY = abs(sin(direcao))*aceleRobo
 
-    # aceleRoboY = sin(direcao)*aceleRobo
+    # Monta o Gráfico
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
     ypbola = -0.008*(tempo**2) + 0.4*tempo + 0.5
@@ -241,21 +183,17 @@ def graphPosX(posRoboX, posRoboY):
         return
     else:
         pass 
-    raioRobo = 0.09 # metros
-    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+
+    # Dados do Robo:
     aceleMax = 2 # m/s^s
     veloMax = 3 # m/s
-    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
 
     # Dados da bola:
     v0B = 0.64 # m/s
     posBolaX = 1
     posBolaY = 0.5
     tempoTot = 0
-    encontrou = False
-    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-    #print(distRoboBola)
+
 
     # Encontrar a bola:
     while tempoTot <= 20:
@@ -268,8 +206,7 @@ def graphPosX(posRoboX, posRoboY):
 
         if tempoTot != 0:
             acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-            print("\nacele teste =",acelePrecisa)
-            print("tempotot =%f\n"%tempoTot)
+            
             veloPrecisa = acelePrecisa*tempoTot
             if acelePrecisa > aceleMax or veloPrecisa > veloMax:
                 pass
@@ -283,18 +220,14 @@ def graphPosX(posRoboX, posRoboY):
 
         tempoTot += 0.02
     
-    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
-    #     aceleRoboX = - abs(cos(direcao))*aceleRobo
-    # elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
-    #     aceleRoboX = abs(cos(direcao))*aceleRobo
-
+    # Determina a direção da aceleração do robo
     xpbola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
     if posRoboX > xpbola:
         aceleRoboX = - abs(cos(direcao))*aceleRobo
     else:
         aceleRoboX =   abs(cos(direcao))*aceleRobo
 
-
+    # Monta o Gráfico
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
     xpbola = -0.005*(tempo**2) + 0.5*tempo + 1
@@ -322,21 +255,17 @@ def graphVeloX(posRoboX, posRoboY):
         return
     else:
         pass 
-    raioRobo = 0.09 # metros
-    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+    
+    # Dados do Robo:
     aceleMax = 2 # m/s^s
     veloMax = 3 # m/s
-    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
+
 
     # Dados da bola:
-    v0B = 0.64 # m/s
     posBolaX = 1
     posBolaY = 0.5
     tempoTot = 0
-    encontrou = False
-    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-    #print(distRoboBola)
+  
 
     # Encontrar a bola:
     while tempoTot <= 20:
@@ -349,31 +278,26 @@ def graphVeloX(posRoboX, posRoboY):
 
         if tempoTot != 0:
             acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-            print("\nacele teste =",acelePrecisa)
-            print("tempotot =%f\n"%tempoTot)
+            
             veloPrecisa = acelePrecisa*tempoTot
             if acelePrecisa > aceleMax or veloPrecisa > veloMax:
                 pass
             else:
                 aceleRobo = acelePrecisa
-                veloRobo = veloPrecisa
                 direcao = atan((posBolaY - posRoboY)/(posBolaX - posRoboX))
-                encontrou = True
                 tempoEncontro = tempoTot
                 break
 
         tempoTot += 0.02
-    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
-    #     aceleRoboX = - abs(cos(direcao))*aceleRobo
-    # elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
-    #     aceleRoboX = abs(cos(direcao))*aceleRobo
 
+    # Determina a direção da aceleração do robo
     xpbola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
     if posRoboX > xpbola:
         aceleRoboX = - abs(cos(direcao))*aceleRobo
     else:
         aceleRoboX =   abs(cos(direcao))*aceleRobo
 
+    # Monta o Gráfico
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
     xvbola = -0.010*tempo + 0.5
@@ -401,21 +325,18 @@ def graphVeloY(posRoboX, posRoboY):
         return
     else:
         pass 
-    raioRobo = 0.09 # metros
-    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+
+    # Dados do Robo:
     aceleMax = 2 # m/s^s
     veloMax = 3 # m/s
-    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
+
 
     # Dados da bola:
-    v0B = 0.64 # m/s
     posBolaX = 1
     posBolaY = 0.5
     tempoTot = 0
-    encontrou = False
     distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-    #print(distRoboBola)
+  
 
     # Encontrar a bola:
     while tempoTot <= 20:
@@ -428,8 +349,7 @@ def graphVeloY(posRoboX, posRoboY):
 
         if tempoTot != 0:
             acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-            print("\nacele teste =",acelePrecisa)
-            print("tempotot =%f\n"%tempoTot)
+            
             veloPrecisa = acelePrecisa*tempoTot
             if acelePrecisa > aceleMax or veloPrecisa > veloMax:
                 pass
@@ -442,18 +362,15 @@ def graphVeloY(posRoboX, posRoboY):
                 break
 
         tempoTot += 0.02
-    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
-    #     aceleRoboY = - abs(sin(direcao))*aceleRobo
-    # else:
-    #     aceleRoboY = abs(sin(direcao))*aceleRobo
 
+    # Determina a direção da aceleração do robo
     ypbola = -0.008*(tempoEncontro**2) + 0.4*tempoEncontro + 0.5
     if posRoboY > ypbola:
         aceleRoboY = - abs(sin(direcao))*aceleRobo
     else:
         aceleRoboY = abs(sin(direcao))*aceleRobo
 
-
+    # Monta o Gráfico
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
     yvbola = -0.016*tempo + 0.4
@@ -481,21 +398,17 @@ def graphAceleX(posRoboX, posRoboY):
         return
     else:
         pass 
-    raioRobo = 0.09 # metros
-    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+
+    # Dados Robo:
     aceleMax = 2 # m/s^s
     veloMax = 3 # m/s
-    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
+  
 
     # Dados da bola:
-    v0B = 0.64 # m/s
     posBolaX = 1
     posBolaY = 0.5
     tempoTot = 0
-    encontrou = False
-    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-    #print(distRoboBola)
+
 
     # Encontrar a bola:
     while tempoTot <= 20:
@@ -508,32 +421,26 @@ def graphAceleX(posRoboX, posRoboY):
 
         if tempoTot != 0:
             acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-            print("\nacele teste =",acelePrecisa)
-            print("tempotot =%f\n"%tempoTot)
+            
             veloPrecisa = acelePrecisa*tempoTot
             if acelePrecisa > aceleMax or veloPrecisa > veloMax:
                 pass
             else:
                 aceleRobo = acelePrecisa
-                veloRobo = veloPrecisa
                 direcao = atan((posBolaY - posRoboY)/(posBolaX - posRoboX))
-                encontrou = True
                 tempoEncontro = tempoTot
                 break
 
         tempoTot += 0.02
-    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
-    #     aceleRoboX = - abs(cos(direcao))*aceleRobo
-    # elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
-    #     aceleRoboX = abs(cos(direcao))*aceleRobo
-
+  
+    # Determina a direção da aceleração do robo
     xpbola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
     if posRoboX > xpbola:
         aceleRoboX = - abs(cos(direcao))*aceleRobo
     else:
         aceleRoboX =   abs(cos(direcao))*aceleRobo
 
-    fig, ax = plt.subplots()
+    # Monta o Gráfico
     tempo = np.linspace(0, tempoEncontro, 1000)
     xabola = -0.010*(tempo**0)
     xarobo = aceleRoboX*(tempo**0)
@@ -560,21 +467,15 @@ def graphAceleY(posRoboX, posRoboY):
         return
     else:
         pass 
-    raioRobo = 0.09 # metros
-    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+
+    # Dados do Robo
     aceleMax = 2 # m/s^s
     veloMax = 3 # m/s
-    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
 
     # Dados da bola:
-    v0B = 0.64 # m/s
     posBolaX = 1
     posBolaY = 0.5
     tempoTot = 0
-    encontrou = False
-    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-    #print(distRoboBola)
 
     # Encontrar a bola:
     while tempoTot <= 20:
@@ -587,8 +488,7 @@ def graphAceleY(posRoboX, posRoboY):
 
         if tempoTot != 0:
             acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-            print("\nacele teste =",acelePrecisa)
-            print("tempotot =%f\n"%tempoTot)
+            
             veloPrecisa = acelePrecisa*tempoTot
             if acelePrecisa > aceleMax or veloPrecisa > veloMax:
                 pass
@@ -601,11 +501,8 @@ def graphAceleY(posRoboX, posRoboY):
                 break
 
         tempoTot += 0.02
-    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
-    #     aceleRoboY = - abs(sin(direcao))*aceleRobo
-    # else:
-    #     aceleRoboY = abs(sin(direcao))*aceleRobo
 
+    # Determina a aceleração em Y
     ypbola = -0.008*(tempoEncontro**2) + 0.4*tempoEncontro + 0.5
     if posRoboY > ypbola:
         aceleRoboY = - abs(sin(direcao))*aceleRobo
@@ -613,7 +510,7 @@ def graphAceleY(posRoboX, posRoboY):
         aceleRoboY = abs(sin(direcao))*aceleRobo
 
 
-    fig, ax = plt.subplots()
+    # Monta o Gráfico
     tempo = np.linspace(0, tempoEncontro, 1000)
     yabola = -0.016*(tempo**0)
     yarobo = aceleRoboY*(tempo**0)
@@ -630,6 +527,7 @@ def graphAceleY(posRoboX, posRoboY):
     # Printar o gráfico
     plt.show()
 
+###### Gráficos Distancia Relativa/Tempo ##########
 def graphDistRel(posRoboX, posRoboY):
     if posRoboX < 0 or posRoboX > 9:
         msg()
@@ -639,21 +537,17 @@ def graphDistRel(posRoboX, posRoboY):
         return
     else:
         pass 
-    raioRobo = 0.09 # metros
-    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+
+    # Dados do Robô
     aceleMax = 2 # m/s^s
     veloMax = 3 # m/s
-    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
+
 
     # Dados da bola:
-    v0B = 0.64 # m/s
     posBolaX = 1
     posBolaY = 0.5
     tempoTot = 0
-    encontrou = False
-    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-    #print(distRoboBola)
+
 
     # Encontrar a bola:
     while tempoTot <= 20:
@@ -666,26 +560,20 @@ def graphDistRel(posRoboX, posRoboY):
 
         if tempoTot != 0:
             acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-            print("\nacele teste =",acelePrecisa)
-            print("tempotot =%f\n"%tempoTot)
+            
             veloPrecisa = acelePrecisa*tempoTot
             if acelePrecisa > aceleMax or veloPrecisa > veloMax:
                 pass
             else:
                 aceleRobo = acelePrecisa
-                veloRobo = veloPrecisa
                 direcao = atan((posBolaY - posRoboY)/(posBolaX - posRoboX))
-                encontrou = True
                 tempoEncontro = tempoTot
                 break
 
         tempoTot += 0.02
 
     
-    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366:
-    #     aceleRoboY = - abs(sin(direcao))*aceleRobo
-    # else:
-    #     aceleRoboY = abs(sin(direcao))*aceleRobo
+    # Define as acelerações do Robô nas direções X e Y:
 
     ypbola = -0.008*(tempoEncontro**2) + 0.4*tempoEncontro + 0.5
     if posRoboY > ypbola:
@@ -693,11 +581,6 @@ def graphDistRel(posRoboX, posRoboY):
     else:
         aceleRoboY = abs(sin(direcao))*aceleRobo
 
-
-    # if posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0 or posRoboY < -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0:
-    #     aceleRoboX = - abs(cos(direcao))*aceleRobo
-    # elif posRoboY >= -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) < 0 or posRoboY > -0.0309*(posRoboX**2) + 0.9215*posRoboX - 0.4366 and tan(direcao) > 0:
-    #     aceleRoboX = abs(cos(direcao))*aceleRobo
 
 
     xpbola = -0.005*(tempoEncontro**2) + 0.5*tempoEncontro + 1
@@ -707,15 +590,8 @@ def graphDistRel(posRoboX, posRoboY):
         aceleRoboX =   abs(cos(direcao))*aceleRobo
 
 
-
-    fig, ax = plt.subplots()
+    # Monta o Gráfico
     tempo = np.linspace(0, tempoEncontro, 1000)
-
-    # yprobo = posRoboY + aceleRoboY*(tempo**2)/2
-    # ypbola = -0.008*(tempo**2) + 0.4*tempo + 0.5
-    # xprobo = posRoboX + aceleRoboX*(tempo**2)/2
-    # xpbola = -0.005*(tempo**2) + 0.5*tempo + 1
-
     distRel = np.sqrt(((-0.008*(tempo**2) + 0.4*tempo + 0.5) - (posRoboY + aceleRoboY*(tempo**2)/2))**2 + ((-0.005*(tempo**2) + 0.5*tempo + 1) - (posRoboX + aceleRoboX*(tempo**2)/2))**2)
     plt.plot(tempo, distRel, label = 'Distância Relativa Robo-Bola')
 
@@ -729,6 +605,8 @@ def graphDistRel(posRoboX, posRoboY):
     # Printar o gráfico
     plt.show()
 
+
+###### Energia Cinética/Tempo ##########
 def graphEnergiaCinet(posRoboX, posRoboY):
     if posRoboX < 0 or posRoboX > 9:
         msg()
@@ -738,21 +616,17 @@ def graphEnergiaCinet(posRoboX, posRoboY):
         return
     else:
         pass 
-    raioRobo = 0.09 # metros
-    raioIntercep = raioRobo + (1/3*raioRobo) + 0.0215
+
+    # Dados do robo:
     aceleMax = 2 # m/s^s
     veloMax = 3 # m/s
-    #posRoboX = float(input("Defina a posição inicial do robo em X no campo (m): "))
-    #posRoboY = float(input("Defina a posição inicial do robo em Y no campo (m): "))
+
 
     # Dados da bola:
-    v0B = 0.64 # m/s
     posBolaX = 1
     posBolaY = 0.5
     tempoTot = 0
-    encontrou = False
-    distRoboBola = sqrt(((posBolaX - posRoboX)**2) + ((posBolaY - posRoboY)**2))
-    #print(distRoboBola)
+
 
     # Encontrar a bola:
     while tempoTot <= 20:
@@ -765,25 +639,21 @@ def graphEnergiaCinet(posRoboX, posRoboY):
 
         if tempoTot != 0:
             acelePrecisa = (2*distRoboBola)/(tempoTot**2)
-            print("\nacele teste =",acelePrecisa)
-            print("tempotot =%f\n"%tempoTot)
+            
             veloPrecisa = acelePrecisa*tempoTot
             if acelePrecisa > aceleMax or veloPrecisa > veloMax:
                 pass
             else:
                 aceleRobo = acelePrecisa
-                veloRobo = veloPrecisa
-                direcao = atan((posBolaY - posRoboY)/(posBolaX - posRoboX))
-                encontrou = True
                 tempoEncontro = tempoTot
                 break
-
         tempoTot += 0.02
 
     aceleBola = 0.019 # (m/s^2)
     mRobo = 2.8 # (Kg)
     mBola = 0.045 # (Kg)
 
+    # Monta o Gráfico
     fig, ax = plt.subplots()
     tempo = np.linspace(0, tempoEncontro, 1000)
     veloRob = aceleRobo*tempo
@@ -803,6 +673,8 @@ def graphEnergiaCinet(posRoboX, posRoboY):
     # Printar o gráfico
     plt.show()
 
+
+# Botões de interação na interface:
 
 posY = Button(janela, text="Posição Y por Tempo", font=("Times New Roman", 15), command= lambda: graphPosY(float(posRoboX.get()), float(posRoboY.get())))
 posY.place(relx=0.7, rely=0.32, anchor=CENTER)
@@ -831,5 +703,5 @@ trajeto.place(relx=0.7, rely=0.92, anchor=CENTER)
 ecinet = Button(janela, text="Energia Cinética", font=("Times New Roman", 15), command= lambda: graphEnergiaCinet(float(posRoboX.get()), float(posRoboY.get())))
 ecinet.place(relx=0.89, rely=0.1, anchor=CENTER)
 
-
+# Manter o Tkinter aberto
 janela.mainloop()
